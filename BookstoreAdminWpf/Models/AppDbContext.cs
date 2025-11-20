@@ -36,7 +36,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Writer> Writers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-5VBOLG0M\\SQLEXPRESS;Database=BookstroreDB;Trusted_Connection=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+        => optionsBuilder.UseSqlServer("");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
