@@ -12,31 +12,56 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <!--AllaBokaffärer-->
-        <StackPanel Grid.Column="0">
-            <TextBlock Margin="5" HorizontalAlignment="Center">Alla Bokaffärer</TextBlock>
-            <ScrollViewer >
-                <DataGrid x:Name="StoresGrid"
-                            AutoGenerateColumns="False"
-                          ColumnWidth="Auto"
-                          CanUserAddRows="False"
-                          IsReadOnly="True"
-          Margin="10"
-          SelectionChanged="StoresGrid_SelectionChanged"
-          ItemsSource="{Binding Stores}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Namn"
-            Binding="{Binding Name}" />
-                        
-                    </DataGrid.Columns>
-                </DataGrid>
-            </ScrollViewer>
-        </StackPanel>
-        
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+         </Grid.RowDefinitions>
+            
+                <TextBlock Margin="5" HorizontalAlignment="Center">Alla Bokaffärer</TextBlock>
+            <StackPanel Grid.Row="1">
+                <ScrollViewer >
+                    <DataGrid x:Name="StoresGrid"
+                     AutoGenerateColumns="False"
+                   ColumnWidth="Auto"
+                   CanUserAddRows="False"
+                   IsReadOnly="True"
+                  Margin="10"
+                 ItemsSource="{Binding Stores}"
+                 SelectedItem ="{Binding SelectedStore}"
+                   >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Namn"
+                            Binding="{Binding Name}" />
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </StackPanel>
+
+        </Grid>
+       
         <!--Inventory för vald affär-->
-        <StackPanel Grid.Column="1">
-            <TextBlock x:Name="InventoryHeader" Margin="5" HorizontalAlignment="Center">Lager</TextBlock>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" Margin="5" HorizontalAlignment="Center">
+                <Run Text="Lager: " />
+                <Run Text="{Binding SelectedStore.Name}" />
+            </TextBlock>
+            
+            <StackPanel Grid.Row="1">
+        
             <ScrollViewer >
                 <DataGrid ItemsSource="{Binding Inventory}"
                          AutoGenerateColumns="False"
@@ -55,18 +80,29 @@
 
             </ScrollViewer>
         </StackPanel>
-        
-        <!--Alla böcker-->
-        <StackPanel Grid.Column="2">
-            <TextBlock Margin="5" HorizontalAlignment="Center">Alla böcker</TextBlock>
-            <ScrollViewer >
+
+            <!--Alla böcker-->
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" Margin="5" HorizontalAlignment="Center">Alla böcker</TextBlock>
+       
+            <ScrollViewer Grid.Row="1" >
                 <DataGrid Name="AllBooksGrid"
                           AutoGenerateColumns="False"
                           Margin="10"
                           ColumnWidth="Auto"
                           IsReadOnly="True"
                           CanUserAddRows="False"
-                          ItemsSource="{Binding Books}">
+                          ItemsSource="{Binding Books}"
+                          SelectedItem="{Binding SelectedBook}"
+                          MouseDoubleClick="EditSelectedBookButton_Click">
+                          
+                          
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Titel"
                             Binding="{Binding Title}" />
@@ -77,7 +113,14 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
-        </StackPanel>
+        </Grid>
         
+        
+        <!--Knappar för att hantera böcker för att redigera bok-->
+        <StackPanel Grid.Column="2" Grid.Row="1">
+            <Button x:Name="EditBookBtn" Content="Redigera vald bok" Click="EditSelectedBookButton_Click" Margin="5"/>
+            <Button x:Name="NewBookButton" Content="Lägg till ny bok" Click="NewBookButton_Click" Margin="5"/>
+            <Button x:Name="DeleteBookBtn" Content="Ta bort bok från databas" Click="DeleteBookBtn_Click" Margin="5"/>
+        </StackPanel>
     </Grid>
 </Window>

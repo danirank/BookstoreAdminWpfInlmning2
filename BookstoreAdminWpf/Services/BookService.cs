@@ -24,6 +24,7 @@ namespace BookstoreAdminWpf.Services
             var books = await _db.Books
                         .Include(w => w.Writer)
                         .Include(g=>g.Genre)
+                        .Include(p=>p.Publisher)
                         .ToListAsync();
             return books;
 
@@ -53,17 +54,28 @@ namespace BookstoreAdminWpf.Services
         }
 
         //Update book (tex om pris ändras) 
-        public async Task UpdateBookAsync(Book book)
+        public async Task UpdateBookAsync(Book book, string isbn)
         {
+            if (book.Isbn13 != isbn)
+            {
+                return ;
+            }
+
             _db.Books.Update(book);
             await _db.SaveChangesAsync();
         }
 
         //Delete Book
-        public async Task DeleteBookAsync(Book book)
+        public async Task<bool> DeleteBookAsync(string isbn13)
         {
+            var book = await _db.Books.FindAsync(isbn13);
+            if(book == null)
+            {
+                return false;
+            }
             _db.Books.Remove(book);
             await _db.SaveChangesAsync();
+            return true;
         }
 
     }
