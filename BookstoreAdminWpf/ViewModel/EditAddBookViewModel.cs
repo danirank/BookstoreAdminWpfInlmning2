@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BookstoreAdminWpf.ViewModel
 {
@@ -135,6 +136,46 @@ namespace BookstoreAdminWpf.ViewModel
             {
                 SelectedPublisher = Publishers.
                     FirstOrDefault(p => p.PublisherId == Book.GenreId);
+            }
+        }
+
+        public async Task SaveNewGenreAsync(Genre genre)
+        {
+            try
+            {
+                    await _genreService.AddNewGenreAsync(genre);
+                    Genres.Add(genre);
+                
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Misslyckades att spara ny genre till db.\n"+ex.Message);
+            }
+        }
+        public async Task SaveNewWriterAsync(Writer writer)
+        {
+            try
+            {
+                await _writerService.AddNewWriterAsync(writer);
+                Writers.Add(writer);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Misslyckades att spara ny writer till db.\n" + ex.Message);
+            }
+        }
+
+        public async Task SaveNewPublisherAsync(Publisher publisher)
+        {
+            try
+            {
+                await _publisherService.AddNewPubslisherAsync(publisher);
+                Publishers.Add(publisher);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Misslyckades att spara ny publisher till db.\n" + ex.Message);
             }
         }
     }

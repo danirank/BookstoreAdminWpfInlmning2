@@ -23,14 +23,14 @@ namespace BookstoreAdminWpf
     /// </summary>
     public partial class EditAddBookWindow : Window
     {
-        
-        public EditAddBookViewModel Vm;   
+
+        public EditAddBookViewModel Vm;
         public EditAddBookWindow(Book? book, WriterService writerService, GenreService genreService, PublisherService publisherService)
         {
             InitializeComponent();
-            
-           Vm = new EditAddBookViewModel(book, writerService,genreService,publisherService);
-           DataContext = Vm;
+
+            Vm = new EditAddBookViewModel(book, writerService, genreService, publisherService);
+            DataContext = Vm;
             Loaded += LoadWritersAndGenresAsync;
         }
 
@@ -40,7 +40,52 @@ namespace BookstoreAdminWpf
             await Vm.LoadAllGenresAsync();
             await Vm.LoadAllPublishersAsync();
         }
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            if (btn != null)
+            {
+
+                switch (btn.Tag.ToString())
+                {
+                    case "1":
+                        SaveBookOnClick();
+
+                        DialogResult = true;
+                        Close();
+
+                        break;
+
+                    case "2":
+                        await SaveGenreOnClick(); 
+                        break;
+
+                    case "3":
+                        await SaveWriterOnClick();
+                        break;
+                    case "4":
+                        await SavePublisherOnClick();
+
+                        break;
+
+                    default: return;
+
+                }
+
+
+
+               
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+
+        private void SaveBookOnClick()
         {
             if (Vm.Book is null)
                 return;
@@ -56,13 +101,13 @@ namespace BookstoreAdminWpf
 
             if (Vm.Book.Isbn13 == null)
             {
-              Vm.Book.Isbn13 = cleanedIsbn;
+                Vm.Book.Isbn13 = cleanedIsbn;
 
             }
-             Vm.Book.Title = TitleBox.Text;
-            
+            Vm.Book.Title = TitleBox.Text;
 
-            if (!decimal.TryParse(PriceBox.Text,NumberStyles.Any,CultureInfo.InvariantCulture, out var price))
+
+            if (!decimal.TryParse(PriceBox.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out var price))
             {
                 MessageBox.Show("Ogiltigt pris.");
                 return;
@@ -92,17 +137,68 @@ namespace BookstoreAdminWpf
             }
             Vm.Book.Publisher = Vm.SelectedPublisher;
 
-           
-
-
-            DialogResult = true;  
-            Close();
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) 
+        
+
+        private async Task SaveGenreOnClick()
         {
-            DialogResult = false;
-            Close();
+            Genre newGenre = new Genre();
+
+            newGenre.Name = NewGenreBox.Text;
+
+            await Vm.SaveNewGenreAsync(newGenre);
+
+            Vm.SelectedGenre = newGenre;
+
+            NewGenreGrid.Visibility = Visibility.Collapsed;
+
+        }
+
+        private async Task SaveWriterOnClick()
+        {
+            Writer newWriter = new Writer();
+
+            newWriter.FirstName = NewWriterFirstNameBox.Text;
+            newWriter.LastName = NewWriterLastNameBox.Text;
+            newWriter.BirthdayAsDateTime = NewWriterBirthday.SelectedDate;
+            
+            await Vm.SaveNewWriterAsync(newWriter);
+
+            Vm.SelectedWriter = newWriter;
+
+            NewWriterGrid.Visibility = Visibility.Collapsed;
+
+        }
+
+        private async Task SavePublisherOnClick()
+        {
+            Publisher newPublisher = new Publisher();
+
+            newPublisher.Name = NewPublisherBox.Text;
+
+            await Vm.SaveNewPublisherAsync(newPublisher);
+
+            Vm.SelectedPublisher = newPublisher;
+
+            NewPublisherGrid.Visibility = Visibility.Collapsed;
+
+        }
+
+        private  void AddNewGenreBtn_Click(object sender, RoutedEventArgs e)
+        {
+            NewGenreGrid.Visibility = Visibility.Visible;
+
+        }
+
+        private void AddNewWritherBtn_Click(object sender, RoutedEventArgs e)
+        {
+            NewWriterGrid.Visibility = Visibility.Visible;
+        }
+
+        private void AddNewPublisher_Click(object sender, RoutedEventArgs e)
+        {
+            NewPublisherGrid.Visibility = Visibility.Visible;
         }
     }
 }

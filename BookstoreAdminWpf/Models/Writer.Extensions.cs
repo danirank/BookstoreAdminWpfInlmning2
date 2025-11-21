@@ -11,5 +11,12 @@ namespace BookstoreAdminWpf.Models
     {
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
+
+        [NotMapped]
+        public DateTime? BirthdayAsDateTime
+        {
+            get => Birthdate?.ToDateTime(TimeOnly.MinValue);
+            set => Birthdate = value.HasValue ? DateOnly.FromDateTime(value.Value) : null;
+        }
     }
 }

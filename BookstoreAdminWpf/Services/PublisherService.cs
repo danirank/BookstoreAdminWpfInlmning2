@@ -25,7 +25,7 @@ namespace BookstoreAdminWpf.Services
         }
 
         //Save new publisher
-        public async Task AddNewGenreAsync(Publisher publisher)
+        public async Task AddNewPubslisherAsync(Publisher publisher)
         {
             await _db.Publishers.AddAsync(publisher);
             await _db.SaveChangesAsync();

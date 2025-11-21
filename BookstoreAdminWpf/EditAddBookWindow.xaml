@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreAdminWpf"
         mc:Ignorable="d"
-        Title="EditAddBookWindow" Height="450" Width="400"
+        Title="EditAddBookWindow" Height="650" Width="600"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
@@ -44,10 +44,38 @@
                 <Button x:Name="AddNewGenreBtn"
                     Content="Add new Genre"
                     Grid.Column="1"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                        Click="AddNewGenreBtn_Click"/>
             </Grid>
 
-            <TextBlock Text="Author" />
+                <Grid Visibility="Collapsed" x:Name="NewGenreGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Namn på Genre"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="NewGenreBox"/>
+
+                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                        <Button Content="Spara"
+                 Width="80"
+                 Margin="5,0,5,0"
+                Click="Save_Click"
+                    Tag="2"/>
+                        <Button Content="Avbryt"
+                    Width="80"
+                    Click="Cancel_Click"/>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Author" />
 
             <!-- Author: ComboBox max bredd, knapp till höger -->
             <Grid Margin="0,5,0,10">
@@ -62,15 +90,56 @@
                       SelectedItem="{Binding SelectedWriter}"
                       Grid.Column="0"
                       Margin="0,0,10,0"/>
+                
 
                 <Button x:Name="AddNewWritherBtn"
                     Content="Add new Writer"
                     Grid.Column="1"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                        Click="AddNewWritherBtn_Click"/>
+                   
             </Grid>
-            
-            
-            <TextBlock Text="Pubslisher" />
+
+                <Grid Visibility="Collapsed" x:Name="NewWriterGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Förnamn"/>
+                    <TextBox Margin="5" Grid.Row="1" Grid.Column="0" x:Name="NewWriterFirstNameBox"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Efternamn"/>
+                    <TextBox Margin="5" Grid.Row="1" Grid.Column="1" x:Name="NewWriterLastNameBox"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Födelsedag"/>
+                    <DatePicker Grid.Column="2" Grid.Row="1" x:Name="NewWriterBirthday"
+                                 SelectedDateFormat="Short"
+                                    Margin="0,5,0,10" />
+
+
+                    <StackPanel Grid.Column="3" Grid.Row="1" Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                        <Button Content="Spara"
+                            Width="80"
+                            Margin="5,0,5,0"
+                            Click="Save_Click"
+                                Tag="3"/>
+                        <Button Content="Avbryt"
+                                Width="80"
+                                Click="Cancel_Click"/>
+                    </StackPanel>
+                </Grid>
+
+
+                <TextBlock Text="Pubslisher" />
 
             <!-- Author: ComboBox max bredd, knapp till höger -->
             <Grid Margin="0,5,0,10">
@@ -89,10 +158,40 @@
                 <Button x:Name="AddNewPublisher"
                     Content="Add new Publisher"
                     Grid.Column="1"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                        Click="AddNewPublisher_Click"/>
             </Grid>
 
-            <TextBlock Text="Language" />
+
+                <Grid Visibility="Collapsed" x:Name="NewPublisherGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Namn på Pusblisher"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="NewPublisherBox"/>
+
+                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                        <Button Content="Spara"
+                        Width="80"
+                    Margin="5,0,5,0"
+                    Click="Save_Click"
+                     Tag="4"/>
+                        <Button Content="Avbryt"
+                         Width="80"
+                        Click="Cancel_Click"/>
+                    </StackPanel>
+                </Grid>
+
+
+                <TextBlock Text="Language" />
             <TextBox x:Name="LangBox"
                  Text="{Binding Book.Language}"
                  Margin="0,5,0,10"/>
@@ -113,7 +212,8 @@
                 <Button Content="Spara"
                     Width="80"
                     Margin="0,0,5,0"
-                    Click="Save_Click"/>
+                    Click="Save_Click"
+                    Tag="1"/>
                 <Button Content="Avbryt"
                     Width="80"
                     Click="Cancel_Click"/>
