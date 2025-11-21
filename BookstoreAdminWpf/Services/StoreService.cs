@@ -27,6 +27,25 @@ namespace BookstoreAdminWpf.Services
             return stores;
         }
 
+        public async Task<Store> GetStoreByID(int? storeId)
+        {
+            var store = await _db.Stores.FirstOrDefaultAsync(x=> x.StoreId == storeId);
+            return store;
+            
+        }
+
+        public async Task<bool> DeleteStoreAsync(int storeId)
+        {
+            var store = await _db.Stores.FindAsync(storeId);
+            if (store == null)
+            {
+                return false;
+            }
+            _db.Remove(store);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<Inventory>> GetInventoriesForStoreAsync(int storeId)
         {
             
@@ -39,5 +58,25 @@ namespace BookstoreAdminWpf.Services
             return inventory;
     }
 
-}
+        public async Task CreateNewStoreAsync(Store store)
+        {
+            if (store is not null)
+            {
+                await _db.Stores.AddAsync(store);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateBookAsync(Store store, int id)
+        {
+            if (store.StoreId != id)
+            {
+                return;
+            }
+
+            _db.Stores.Update(store);
+            await _db.SaveChangesAsync();
+        }
+
+    }
 }

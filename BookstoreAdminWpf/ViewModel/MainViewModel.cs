@@ -50,11 +50,24 @@ namespace BookstoreAdminWpf.ViewModel
                 if (value != null)
                 {
                     _ = ShowInventoryAsync(value.StoreId);
+                   
+                } else
+                {
+                    TotalInventoryValue = 0;
                 }
             }
         }
 
-
+        private decimal _totalInventoryValue;
+        public decimal TotalInventoryValue
+        {
+            get => _totalInventoryValue;
+            set
+            {
+                _totalInventoryValue = value;
+                OnPropertyChanged();
+            }
+        }
 
         private ObservableCollection<Store> _stores = new();
         public ObservableCollection<Store> Stores
@@ -105,11 +118,51 @@ namespace BookstoreAdminWpf.ViewModel
             Stores = new ObservableCollection<Store>(list);
         }
 
+        public async Task UpdateStoreAsync(Store store)
+        {
+
+            try
+            {
+                if (store == null || SelectedStore == null)
+                {
+                    MessageBox.Show("Store is null");
+                    return;
+                }
+
+                await _storeService.UpdateBookAsync(store, SelectedStore.StoreId);
+                await LoadAllStoresAsync();
+
+                MessageBox.Show($"Butik med namn {store.Name} uppdaterades");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fel vid uppdatering av butik:\n{ex.Message}");
+            }
+        }
+
+        public async Task AddNewStoreAsync(Store store)
+        {
+            try
+            {
+              await _storeService.CreateNewStoreAsync(store); 
+                Stores.Add(store);
+            } catch(Exception ex)
+            {
+                MessageBox.Show("Something went wrong \n" +  ex.Message);
+            }
+        }
+
         public async Task ShowInventoryAsync(int id)
         {
 
             var list = await _storeService.GetInventoriesForStoreAsync(id);
             Inventory = new ObservableCollection<Inventory>(list);
+
+            if (SelectedStore != null)
+            {
+                TotalInventoryValue = SelectedStore.GetTotalInventoryValue();
+            }
         }
 
         public async Task AddNewBookAsync(Book book)
@@ -177,6 +230,47 @@ namespace BookstoreAdminWpf.ViewModel
                 else
                 {
                     MessageBox.Show("Misslyckades att radera bok");
+                }
+
+            }
+        }
+
+        public async Task<bool> StoreExistsInDb(Store? store, int? storeId)
+        {
+            if (store == null || storeId == null) return false;
+           
+            var dbStore = await _storeService.GetStoreByID(storeId);
+            
+
+            return dbStore.StoreId == store.StoreId;
+        } 
+        public async Task DeleteStoreAsync(Store store)
+        {
+            if (SelectedStore is null)
+            {
+                MessageBox.Show("Välj butiken du vill radera");
+                return;
+            }
+
+            var mbResult = MessageBox.Show(
+                $"Är du säker på att du vill ta bort butiken med namn {store.Name}",
+                "Radera butik", MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+                );
+
+            if (mbResult == MessageBoxResult.Yes)
+            {
+                bool deleted = await _storeService.DeleteStoreAsync(SelectedStore.StoreId);
+
+                if (deleted)
+                {
+                    MessageBox.Show("Butik raderad");
+                    Stores.Remove(store);
+                    SelectedStore = null;
+                }
+                else
+                {
+                    MessageBox.Show("Misslyckades att radera nutik");
                 }
 
             }

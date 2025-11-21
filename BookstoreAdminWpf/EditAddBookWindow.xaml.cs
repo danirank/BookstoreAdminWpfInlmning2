@@ -137,9 +137,7 @@ namespace BookstoreAdminWpf
             }
             Vm.Book.Publisher = Vm.SelectedPublisher;
 
-        }
-
-        
+        }     
 
         private async Task SaveGenreOnClick()
         {
