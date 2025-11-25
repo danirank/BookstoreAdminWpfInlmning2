@@ -32,5 +32,20 @@ namespace BookstoreAdminWpf.Services
             await _db.SaveChangesAsync();
 
         }
+
+        //Delete Writer
+        public async Task<bool> DeleteWriterAsync(int writerId)
+        {
+            var writer = await _db.Writers.FindAsync(writerId);
+
+            if (writer is null)
+            {
+                return false;
+            }
+
+             _db.Writers.Remove(writer);
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }

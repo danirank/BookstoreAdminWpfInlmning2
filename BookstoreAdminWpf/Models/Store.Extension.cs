@@ -15,6 +15,9 @@ namespace BookstoreAdminWpf.Models
             if (Inventories == null) return 0;
 
             return Inventories.Sum(i => i.Quantity * i.Isbn13Navigation.Price);       
+
         }
+
+       
     }
 }

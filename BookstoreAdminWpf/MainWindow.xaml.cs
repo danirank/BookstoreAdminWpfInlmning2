@@ -112,39 +112,45 @@ namespace BookstoreAdminWpf
 
             if (btn != null)
             {
-                if(btn.Tag.ToString() =="2")
+                if (btn.Tag.ToString() == "1")
+                {
+                    ConfirmStoreUpdate.Content = "Uppdatera butik";
+                }
+                if (btn.Tag.ToString() == "2")
                 {
                     _vm.SelectedStore = null;
+                    ConfirmStoreUpdate.Content = "Spara ny butik";
                     return;
                 }
                 if (btn.Tag.ToString() == "3")
                 {
-                  await  _vm.DeleteStoreAsync(_vm.SelectedStore);
+                    await _vm.DeleteStoreAsync(_vm.SelectedStore);
                     EditStorePanel.Visibility = Visibility.Hidden;
                 }
             }
 
 
 
-            
+
 
         }
-    
+
 
         private async void ConfirmStoreUpdate_Click(object sender, RoutedEventArgs e)
         {
             int? id = _vm.SelectedStore?.StoreId;
-           
+
             bool storeExists = await _vm.StoreExistsInDb(_vm.SelectedStore, id);
 
-            
 
-            if (_vm.Stores.Any(i=> i.StoreId == _vm.SelectedStore?.StoreId) && storeExists) 
+
+            if (_vm.Stores.Any(i => i.StoreId == _vm.SelectedStore?.StoreId) && storeExists)
             {
                 await UpdateStoreInfo();
-            } else
+            }
+            else
             {
-               await NewStoreOnClick();
+                await NewStoreOnClick();
             }
 
             EditStorePanel.Visibility = Visibility.Hidden;
@@ -162,7 +168,7 @@ namespace BookstoreAdminWpf
             Store store = _vm.SelectedStore;
 
             await _vm.UpdateStoreAsync(store);
-            
+
         }
 
         private async Task NewStoreOnClick()
@@ -183,17 +189,111 @@ namespace BookstoreAdminWpf
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             EditStorePanel.Visibility = Visibility.Hidden;
+            AddInventoryGrid.Visibility = Visibility.Collapsed;
+            MoveInventoryGrid.Visibility = Visibility.Collapsed;
         }
 
 
-        //private async void StoresGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (StoresGrid.SelectedItem is Store store)
-        //    {
-        //        InventoryHeader.Text = "Lager: "+ store.Name;
-        //        var id = store.StoreId;
-        //        await _vm.ShowInventoryAsync(id);
-        //    }
-        //}
+        private async void ConfirmAddMoveBookToInventory_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            if (btn != null)
+            {
+
+                var tag = btn.Tag.ToString();
+
+
+                if (_vm.SelectedStore is not Store store || _vm.SelectedBook is not Book book)
+                {
+                    return;
+
+                }
+
+
+
+                //Samma som Tag 2 "From store vid move book"
+
+                int storeId = store.StoreId;
+                string isbn = book.Isbn13;
+                try
+                {
+                    switch (tag)
+                    {
+                        case "1": //Add book to inventory
+
+                            if (!int.TryParse(QuantityBox.Text.Trim(), out var quantity) || quantity < 1)
+                            {
+                                MessageBox.Show("Antal måste vara en siffra (1 eller större) ");
+                                return;
+                            }
+
+                            await _vm.AddBookToInventoryAsync(storeId, quantity, isbn);
+                            MessageBox.Show("Uppdatering lyckades");
+
+                            break;
+
+                        case "2": //Movebook between stores
+
+                            if (!int.TryParse(QuantityToMoveBox.Text.Trim(), out var quantityToMove))
+                            {
+                                MessageBox.Show("Ogiltligt antal att flytta");
+                                return;
+                            }
+
+                            bool removedSucces = await _vm.RemoveBooksFromInventoryAsync(storeId, quantityToMove, isbn);
+
+                            if (removedSucces)
+                            {
+
+                                var toStore = _vm.Stores.Where(s => s.StoreId == (int)ToStoreBox.SelectedValue).FirstOrDefault();
+                                
+                                if (toStore is null)
+                                {
+                                    //Lägger tillbaka bok 
+                                    await _vm.AddBookToInventoryAsync(storeId, quantityToMove, isbn);
+
+                                    MessageBox.Show($"Något gick fel när bok skule flyttas till Affär");
+                                    return;
+                                }
+
+
+                                await _vm.AddBookToInventoryAsync(toStore.StoreId, quantityToMove, isbn);
+                            }
+
+                            break;
+                        default:
+                            throw new Exception("Okänt kommando");
+
+
+                    }
+
+
+
+
+                    await _vm.ShowInventoryAsync(storeId);
+
+                    AddInventoryGrid.Visibility = Visibility.Collapsed;
+                    MoveInventoryGrid.Visibility = Visibility.Collapsed;
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+            }
+        }
+
+
+
+        private void AddBooksToInventory_Click(object sender, RoutedEventArgs e)
+        {
+            AddInventoryGrid.Visibility = Visibility.Visible;
+        }
+
+        private void MovebooksBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MoveInventoryGrid.Visibility = Visibility.Visible;
+        }
     }
 }

@@ -31,5 +31,20 @@ namespace BookstoreAdminWpf.Services
             await _db.SaveChangesAsync();
 
         }
+
+        //Delete Publisher
+        public async Task<bool> DeletePublisherAsync(int publisherId)
+        {
+            var publisher = await _db.Publishers.FindAsync(publisherId);
+
+            if (publisher is null)
+            {
+                return false;
+            }
+
+            _db.Publishers.Remove(publisher);
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }

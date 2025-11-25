@@ -32,5 +32,20 @@ namespace BookstoreAdminWpf.Services
             await _db.SaveChangesAsync();
 
         }
+
+        //Delete Genre
+        public async Task<bool> DeleteGenreAsync(int genreId)
+        {
+            var genre = await _db.Genres.FindAsync(genreId);
+
+            if (genre is null)
+            {
+                return false;
+            }
+
+            _db.Genres.Remove(genre);
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }

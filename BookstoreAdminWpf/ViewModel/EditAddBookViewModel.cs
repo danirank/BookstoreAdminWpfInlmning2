@@ -82,9 +82,7 @@ namespace BookstoreAdminWpf.ViewModel
         }
 
         public Book? Book { get; set; }
-        public string TitleInput { get;  set; } = "";
-        public string IsbnInput { get;  set; } = "";
-        public decimal PriceInput { get;  set; }
+       
 
         private GenreService _genreService;
 
@@ -176,6 +174,97 @@ namespace BookstoreAdminWpf.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show("Misslyckades att spara ny publisher till db.\n" + ex.Message);
+            }
+        }
+
+
+        public async Task DeleteWriterAsync()
+        {
+            try
+            {
+                var writer = SelectedWriter;
+                if (writer == null)
+                {
+                    MessageBox.Show("Välj en författare att ta bort");
+                    return;
+                }
+
+                var mbrResult = MessageBox.Show($"Är du säker på att du vill ta bort Författaren, {writer.FullName}?", "Radera författare", MessageBoxButton.YesNo);
+
+                if (mbrResult == MessageBoxResult.Yes)
+                {
+                    bool deleted = await _writerService.DeleteWriterAsync(writer.WriterId);
+                    if (deleted)
+                    {
+                        Writers.Remove(writer);
+                        MessageBox.Show($"Författaren {writer.FullName} raderad");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fel vid bortagning av författaren\n" + ex.Message);
+            
+            }
+        }
+
+        public async Task DeleteGenreAsync()
+        {
+            try
+            {
+                var genre = SelectedGenre;
+                if (genre == null)
+                {
+                    MessageBox.Show("Välj en genre att ta bort");
+                    return;
+                }
+
+                var mbrResult = MessageBox.Show($"Är du säker på att du vill ta bort Genre, {genre.Name}?", "Radera Genre", MessageBoxButton.YesNo);
+
+                if (mbrResult == MessageBoxResult.Yes)
+                {
+                    bool deleted = await _genreService.DeleteGenreAsync(genre.GenreId);
+                    if (deleted)
+                    {
+                        Genres.Remove(genre);
+                        MessageBox.Show($"Genren {genre.Name} raderad");
+                    } 
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fel vid bortagning av Genren\n" + ex.Message);
+
+            }
+        }
+
+        public async Task DeletePublisherAsync()
+        {
+            try
+            {
+                var publisher = SelectedPublisher;
+                if (publisher == null)
+                {
+                    MessageBox.Show("Välj en publisher att ta bort");
+                    return;
+                }
+
+                var mbrResult = MessageBox.Show($"Är du säker på att du vill ta bort Publisher, {publisher.Name}?", "Radera Publisher", MessageBoxButton.YesNo);
+
+                if (mbrResult == MessageBoxResult.Yes)
+                {
+                    bool deleted = await _publisherService.DeletePublisherAsync(publisher.PublisherId);
+                    if (deleted)
+                    {
+                        Publishers.Remove(publisher);
+                        MessageBox.Show($"Publishern {publisher.Name} raderad");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fel vid bortagning av Publisher\n" + ex.Message);
+
             }
         }
     }

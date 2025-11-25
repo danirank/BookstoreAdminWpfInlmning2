@@ -22,7 +22,10 @@ namespace BookstoreAdminWpf.Services
         
        public async Task<List<Store>> GetAllStoresAsync()
         {
-            var stores = await _db.Stores.ToListAsync();
+            var stores = await _db.Stores
+                .Include(x=> x.Orders)
+                .ThenInclude(x => x.OrderItems)
+                .ToListAsync();
 
             return stores;
         }
@@ -58,6 +61,52 @@ namespace BookstoreAdminWpf.Services
             return inventory;
     }
 
+        //Update Inventory
+        public async Task UpdateInventoryAsync(Inventory inventory)
+        {
+            
+
+            _db.Inventories.Update(inventory);
+            await _db.SaveChangesAsync();
+
+
+        }
+
+        //Add Inventory 
+        public async Task AddInventoryItem(Inventory inventory)
+        {
+            if (inventory is not null )
+            {
+                await _db.Inventories.AddAsync(inventory);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+        public async Task SaveInventoryAsync(Inventory inventory)
+        {
+            // Hämta ev. befintlig rad från DB
+            var existing = await _db.Inventories
+                .SingleOrDefaultAsync(i => i.StoreId == inventory.StoreId
+                                           && i.Isbn13 == inventory.Isbn13);
+
+            if (existing is null)
+            {
+                // Ny rad
+                _db.Inventories.Add(inventory);
+            }
+            else
+            {
+               
+                existing.Quantity = inventory.Quantity;
+                 
+                
+            }
+
+            await _db.SaveChangesAsync();
+        }
+
+
+
         public async Task CreateNewStoreAsync(Store store)
         {
             if (store is not null)
@@ -67,7 +116,7 @@ namespace BookstoreAdminWpf.Services
             }
         }
 
-        public async Task UpdateBookAsync(Store store, int id)
+        public async Task UpdateStoreAsync(Store store, int id)
         {
             if (store.StoreId != id)
             {
@@ -77,6 +126,8 @@ namespace BookstoreAdminWpf.Services
             _db.Stores.Update(store);
             await _db.SaveChangesAsync();
         }
+        
+
 
     }
 }

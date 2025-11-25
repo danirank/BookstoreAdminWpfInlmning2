@@ -51,7 +51,6 @@ namespace BookstoreAdminWpf
                 {
                     case "1":
                         SaveBookOnClick();
-
                         DialogResult = true;
                         Close();
 
@@ -81,10 +80,36 @@ namespace BookstoreAdminWpf
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
-            Close();
+            var btn = sender as Button;
+
+            if (btn != null)
+            {
+                switch (btn.Tag.ToString())
+                {
+                    case "1":
+                        DialogResult = false;
+                        Close();
+                        break;
+                    case "2":
+                      NewGenreGrid.Visibility = Visibility.Collapsed;
+
+                        break;
+                    case "3":
+                          NewWriterGrid.Visibility = Visibility.Collapsed;
+                        break;
+                    case"4":
+                        NewPublisherGrid.Visibility = Visibility.Collapsed;
+                        break;
+
+
+                        default: return;
+                }
+            }
+
         }
 
+
+        //Method for binding elements to properties (move to EditViewModel ? ) 
         private void SaveBookOnClick()
         {
             if (Vm.Book is null)
@@ -182,6 +207,8 @@ namespace BookstoreAdminWpf
             NewPublisherGrid.Visibility = Visibility.Collapsed;
 
         }
+        //
+
 
         private  void AddNewGenreBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -197,6 +224,37 @@ namespace BookstoreAdminWpf
         private void AddNewPublisher_Click(object sender, RoutedEventArgs e)
         {
             NewPublisherGrid.Visibility = Visibility.Visible;
+        }
+
+        //Delete button for Writer, Genre and Publisher
+        private async void DeleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+           var btn = sender as Button;
+
+            if (btn != null)
+            {
+               var tag  = btn.Tag.ToString();
+
+                switch(tag)
+                {
+                    case "1":
+                        await Vm.DeleteGenreAsync();
+                        break;
+
+                    case "2":
+                        await Vm.DeleteWriterAsync();
+                        break;
+
+                    case "3":
+                        await Vm.DeletePublisherAsync();
+                        break;
+
+                    default: return;
+                }
+            }
+
+            
+          
         }
     }
 }

@@ -28,11 +28,11 @@
             <!-- Genre: ComboBox max bredd, knapp till höger -->
             <Grid Margin="0,5,0,10">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <!-- ComboBox fyller ut -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Knapp tar minsta möjliga -->
-                </Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+
+                    </Grid.ColumnDefinitions>
 
                 <ComboBox x:Name="GenreBox"
                       ItemsSource="{Binding Genres}"
@@ -42,11 +42,18 @@
                       Margin="0,0,10,0"/>
 
                 <Button x:Name="AddNewGenreBtn"
-                    Content="Add new Genre"
+                    Content="Ny Genre"
+                     Margin="0,0,5,0"
                     Grid.Column="1"
                     VerticalAlignment="Center"
                         Click="AddNewGenreBtn_Click"/>
-            </Grid>
+                    <Button x:Name="DeleteGenreBtn"
+                        Content="Radera Genre"
+                        Grid.Column="2"
+                         Tag="1"
+                        VerticalAlignment="Center"
+                        Click="DeleteBtn_Click"/>
+                </Grid>
 
                 <Grid Visibility="Collapsed" x:Name="NewGenreGrid">
                     <Grid.ColumnDefinitions>
@@ -69,9 +76,11 @@
                  Margin="5,0,5,0"
                 Click="Save_Click"
                     Tag="2"/>
-                        <Button Content="Avbryt"
+                      <Button Content="Avbryt"
                     Width="80"
+                     Tag="2"
                     Click="Cancel_Click"/>
+                       
                     </StackPanel>
                 </Grid>
 
@@ -81,8 +90,9 @@
             <Grid Margin="0,5,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
                 <ComboBox x:Name="AuthorBox"
                       ItemsSource="{Binding Writers}"
@@ -93,12 +103,19 @@
                 
 
                 <Button x:Name="AddNewWritherBtn"
-                    Content="Add new Writer"
+                    Content="Ny författare"
+                         Margin="0,0,5,0"
                     Grid.Column="1"
                     VerticalAlignment="Center"
                         Click="AddNewWritherBtn_Click"/>
-                   
-            </Grid>
+                    <Button x:Name="DeleteWriterBtn"
+                        Content="Radera författare"
+                    Grid.Column="2"
+                            Tag="2"
+                    VerticalAlignment="Center"
+                     Click="DeleteBtn_Click"/>
+
+                </Grid>
 
                 <Grid Visibility="Collapsed" x:Name="NewWriterGrid">
                     <Grid.ColumnDefinitions>
@@ -134,7 +151,9 @@
                                 Tag="3"/>
                         <Button Content="Avbryt"
                                 Width="80"
+                                Tag="3"
                                 Click="Cancel_Click"/>
+                       
                     </StackPanel>
                 </Grid>
 
@@ -145,8 +164,9 @@
             <Grid Margin="0,5,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
             <ComboBox x:Name="PublisherBox"
                   ItemsSource="{Binding Publishers}"
@@ -156,11 +176,18 @@
                   Margin="0,0,10,0"/>
 
                 <Button x:Name="AddNewPublisher"
-                    Content="Add new Publisher"
+                    Content="Ny Publisher"
                     Grid.Column="1"
+                         Margin="0,0,5,0"
                     VerticalAlignment="Center"
                         Click="AddNewPublisher_Click"/>
-            </Grid>
+                    <Button x:Name="DeletePublisherBtn"
+                        Content="Radera publisher"
+                            Tag="3"
+                     Grid.Column="2"
+                    VerticalAlignment="Center"
+                     Click="DeleteBtn_Click"/>
+                </Grid>
 
 
                 <Grid Visibility="Collapsed" x:Name="NewPublisherGrid">
@@ -186,7 +213,9 @@
                      Tag="4"/>
                         <Button Content="Avbryt"
                          Width="80"
+                          Tag="4"
                         Click="Cancel_Click"/>
+                        
                     </StackPanel>
                 </Grid>
 
@@ -216,6 +245,7 @@
                     Tag="1"/>
                 <Button Content="Avbryt"
                     Width="80"
+                    Tag="1"
                     Click="Cancel_Click"/>
             </StackPanel>
 

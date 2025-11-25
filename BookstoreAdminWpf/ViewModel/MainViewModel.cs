@@ -49,6 +49,7 @@ namespace BookstoreAdminWpf.ViewModel
 
                 if (value != null)
                 {
+                    
                     _ = ShowInventoryAsync(value.StoreId);
                    
                 } else
@@ -93,7 +94,7 @@ namespace BookstoreAdminWpf.ViewModel
             }
         }
 
-
+        
         
         private BookService _bookService;
         private StoreService _storeService;
@@ -106,65 +107,8 @@ namespace BookstoreAdminWpf.ViewModel
             
             
         }
-        public async Task LoadBooksAsync()
-        {
-            var list = await _bookService.GetAllBooksAsync();
-            Books = new ObservableCollection<Book>(list);
-        }
 
-        public async Task LoadAllStoresAsync()
-        {
-            var list = await _storeService.GetAllStoresAsync();
-            Stores = new ObservableCollection<Store>(list);
-        }
-
-        public async Task UpdateStoreAsync(Store store)
-        {
-
-            try
-            {
-                if (store == null || SelectedStore == null)
-                {
-                    MessageBox.Show("Store is null");
-                    return;
-                }
-
-                await _storeService.UpdateBookAsync(store, SelectedStore.StoreId);
-                await LoadAllStoresAsync();
-
-                MessageBox.Show($"Butik med namn {store.Name} uppdaterades");
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Fel vid uppdatering av butik:\n{ex.Message}");
-            }
-        }
-
-        public async Task AddNewStoreAsync(Store store)
-        {
-            try
-            {
-              await _storeService.CreateNewStoreAsync(store); 
-                Stores.Add(store);
-            } catch(Exception ex)
-            {
-                MessageBox.Show("Something went wrong \n" +  ex.Message);
-            }
-        }
-
-        public async Task ShowInventoryAsync(int id)
-        {
-
-            var list = await _storeService.GetInventoriesForStoreAsync(id);
-            Inventory = new ObservableCollection<Inventory>(list);
-
-            if (SelectedStore != null)
-            {
-                TotalInventoryValue = SelectedStore.GetTotalInventoryValue();
-            }
-        }
-
+        //Book
         public async Task AddNewBookAsync(Book book)
         {
             try
@@ -185,28 +129,6 @@ namespace BookstoreAdminWpf.ViewModel
             }
 
         }
-
-        public async Task UpdateBookAsync(Book book)
-        {
-            try
-            {
-                if(book == null || SelectedBook == null)
-                {
-                    MessageBox.Show("Book is null");
-                    return;
-                }
-
-                await _bookService.UpdateBookAsync(book, SelectedBook.Isbn13);
-                await LoadBooksAsync();
-
-                MessageBox.Show($"Bok med titel {book.Title} uppdaterades"); 
-                 
-            } catch (Exception ex)
-            {
-                MessageBox.Show($"Fel vid uppdatering av bok:\n{ex.Message}");
-            }
-        } 
-
         public async Task DeleteBookAsync(Book book)
         {
           
@@ -234,6 +156,155 @@ namespace BookstoreAdminWpf.ViewModel
 
             }
         }
+        public async Task LoadBooksAsync()
+        {
+            var list = await _bookService.GetAllBooksAsync();
+            Books = new ObservableCollection<Book>(list);
+        }
+        public async Task UpdateBookAsync(Book book)
+        {
+            try
+            {
+                if(book == null || SelectedBook == null)
+                {
+                    MessageBox.Show("Book is null");
+                    return;
+                }
+
+                await _bookService.UpdateBookAsync(book, SelectedBook.Isbn13);
+                await LoadBooksAsync();
+
+                MessageBox.Show($"Bok med titel {book.Title} uppdaterades"); 
+                 
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"Fel vid uppdatering av bok:\n{ex.Message}");
+            }
+        } 
+
+        //Store
+
+        public async Task LoadAllStoresAsync()
+        {
+            var list = await _storeService.GetAllStoresAsync();
+            Stores = new ObservableCollection<Store>(list);
+        }
+
+        public async Task UpdateStoreAsync(Store store)
+        {
+
+            try
+            {
+                if (store == null || SelectedStore == null)
+                {
+                    MessageBox.Show("Store is null");
+                    return;
+                }
+
+                await _storeService.UpdateStoreAsync(store, SelectedStore.StoreId);
+                await LoadAllStoresAsync();
+
+                MessageBox.Show($"Butik med namn {store.Name} uppdaterades");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fel vid uppdatering av butik:\n{ex.Message}");
+            }
+        }
+
+        public async Task AddNewStoreAsync(Store store)
+        {
+            try
+            {
+              await _storeService.CreateNewStoreAsync(store); 
+                Stores.Add(store);
+            } catch(Exception ex)
+            {
+                MessageBox.Show("Something went wrong \n" +  ex.Message);
+            }
+        }
+
+        public async Task ShowInventoryAsync(int storeId)
+        {
+
+            var list = await _storeService.GetInventoriesForStoreAsync(storeId);
+            Inventory = new ObservableCollection<Inventory>(list);
+
+            if (SelectedStore != null)
+            {
+                TotalInventoryValue = SelectedStore.GetTotalInventoryValue();
+                
+            }
+        }
+
+        public async Task AddBookToInventoryAsync(int storeId, int quantity, string isbn13)
+        {
+            try
+            {
+
+            var inventory = Inventory.SingleOrDefault(i => i.StoreId == storeId && i.Isbn13 == isbn13);
+
+            if (inventory is null)
+            {
+                    Inventory newInventory = new Inventory()
+                    {
+                        Isbn13 = isbn13,
+                        Quantity = quantity,
+                        StoreId = storeId
+                    };
+
+                    await _storeService.SaveInventoryAsync(newInventory);
+
+                }
+                else
+                {
+
+                        inventory.Quantity += quantity;
+                        await _storeService.SaveInventoryAsync(inventory);
+                }
+
+            
+
+            
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        public async Task<bool> RemoveBooksFromInventoryAsync(int storeId, int quantity, string isbn13)
+        {
+            
+            var inventory = Inventory.FirstOrDefault(i => i.StoreId == storeId && i.Isbn13 == isbn13);
+
+            if (inventory is null)
+            {
+                
+                return false;
+            }
+
+            if (quantity < 1)
+            {
+               
+                return false;
+            }
+
+            if (inventory.Quantity < quantity)
+            {
+                MessageBox.Show("Inte tillräckligt med böcker att flytta");
+                return false;
+            }
+
+            
+            inventory.Quantity -= quantity;
+
+            await _storeService.SaveInventoryAsync(inventory);
+
+            return true;
+        }
+
 
         public async Task<bool> StoreExistsInDb(Store? store, int? storeId)
         {
@@ -244,6 +315,7 @@ namespace BookstoreAdminWpf.ViewModel
 
             return dbStore.StoreId == store.StoreId;
         } 
+
         public async Task DeleteStoreAsync(Store store)
         {
             if (SelectedStore is null)
@@ -275,5 +347,7 @@ namespace BookstoreAdminWpf.ViewModel
 
             }
         }
+
+
     }
 }
