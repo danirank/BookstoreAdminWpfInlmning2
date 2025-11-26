@@ -6,271 +6,309 @@
         xmlns:local="clr-namespace:BookstoreAdminWpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="1000" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <!--AllaBokaffärer-->
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock FontSize="20"  Margin="5" HorizontalAlignment="Center">Alla Bokaffärer</TextBlock>
-            <StackPanel Grid.Row="1">
-
-                <DataGrid x:Name="StoresGrid"
-                     AutoGenerateColumns="False"
-                   ColumnWidth="Auto"
-                   CanUserAddRows="False"
-                   IsReadOnly="True"
-                  Margin="10"
-                 ItemsSource="{Binding Stores}"
-                 SelectedItem ="{Binding SelectedStore}"
-                   >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn MinWidth="250" Header="Namn"
-                            Binding="{Binding Name}" />
-
-                    </DataGrid.Columns>
-                </DataGrid>
-
-            </StackPanel>
-
-        </Grid>
-
-        <!--Inventory för vald affär-->
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
+        <Grid Margin="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock FontSize="20" Grid.Row="0" Margin="5" HorizontalAlignment="Center">
-                <Run Text="Lager: " />
-                <Run Text="{Binding SelectedStore.Name}" />
-            </TextBlock>
+            
 
-            <StackPanel Grid.Row="1">
+            <!--AllaBokaffärer-->
+            <Grid Grid.Column="0">
+                
+                <StackPanel Grid.Row="1">
+                    <TextBlock FontSize="20"  Margin="5" HorizontalAlignment="Center">
+                        Alla Bokaffärer
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Tag="1" x:Name="EditStoreBtn"
+                            Click="EditStoreBtn_Click" Margin="20,20,0,0">
+                            Redigera butik
+                        </Button>
+                        <Button Tag="2" x:Name="NewStoreBtn"
+                            Click="EditStoreBtn_Click" Margin="20,20,0,0">
+                            Ny Butik
+                        </Button>
+                        <Button Tag="3" x:Name="DeleteStoreBtn"
+                        Click="EditStoreBtn_Click" Margin="20,20,0,0">
+                            Radera Butik
+                        </Button>
+                    </StackPanel>
+
+                    <DataGrid x:Name="StoresGrid"
+                        AutoGenerateColumns="False"
+                        ColumnWidth="Auto"
+                            CanUserAddRows="False"
+                            IsReadOnly="True"
+                                Margin="10"
+                        ItemsSource="{Binding Stores}"
+                        SelectedItem ="{Binding SelectedStore}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn MinWidth="250" Header="Namn"
+                        Binding="{Binding Name}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
 
 
-                <DataGrid MaxHeight="150" ItemsSource="{Binding Inventory}"
-                         AutoGenerateColumns="False"
+                    <!--Info om vald butik-->
+                    
+                    <StackPanel Margin="10,0,20,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Margin="20,0,0,0"
+                                FontSize="15" FontWeight="Bold" Text="Namn: "/>
+                            <TextBlock FontStyle="Italic" FontSize="15"
+                                Text="{Binding SelectedStore.Name}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="20,0,0,0" FontSize="15"
+                            FontWeight="Bold" Text="Land: "/>
+                            <TextBlock FontStyle="Italic" FontSize="15"
+                             Text="{Binding SelectedStore.Country}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="20,0,0,0" FontSize="15"
+                             FontWeight="Bold" Text="Adress: "/>
+                            <TextBlock FontStyle="Italic" FontSize="15"
+                            Text="{Binding SelectedStore.FullAdress}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="20,0,0,0" FontSize="15"
+                            FontWeight="Bold" Text="Total värde på inventory: "/>
+                            <TextBlock FontSize="15"
+                            Text="{Binding TotalInventoryValue}"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="EditStorePanel" Visibility="Hidden">
+                            <TextBlock Margin="20,5,0,0" Text="Namn"/>
+                            <TextBox x:Name="StoreNamebox" Margin="20,5,0,0"
+                            Text="{Binding SelectedStore.Name}"/>
+                            <TextBlock Margin="20,5,0,0" Text="Land"/>
+                            <TextBox x:Name="StoreCountryBox" Margin="20,5,0,0"
+                            Text="{Binding SelectedStore.Country}"/>
+                            <TextBlock Margin="20,5,0,0" Text="Gata"/>
+                            <TextBox x:Name="StoreStreetBox" Margin="20,5,0,0"
+                            Text="{Binding SelectedStore.Street}"/>
+                            <TextBlock Margin="20,5,0,0" Text="Stad"/>
+                            <TextBox x:Name="StoreCityBox" Margin="20,5,0,0"
+                                Text="{Binding SelectedStore.City}"/>
+                            <TextBlock Margin="20,5,0,0" Text="Postkod"/>
+                            <TextBox x:Name="StorePostalCodeBox" Margin="20,5,0,20"
+                                Text="{Binding SelectedStore.PostalCode}"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="ConfirmStoreUpdate"
+                                     Click="ConfirmStoreUpdate_Click" Margin="20"
+                                 Content="Uppdatera butik"/>
+                                <Button x:Name="CancelBtn" Click="CancelBtn_Click"
+                                Margin="20" Content="Avbryt"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                   
+                </StackPanel>
+
+                
+                
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+               
+               
+                <!--Inventory för vald affär-->
+                <StackPanel Grid.Row="0">
+                    <TextBlock FontSize="20" Margin="5" HorizontalAlignment="Center">
+                    <Run Text="Lager: " />
+                    <Run Text="{Binding SelectedStore.Name}" />
+                    </TextBlock>
+                    <StackPanel  Orientation="Horizontal">
+                        <Button x:Name="AddBooksToInventory" Click="AddBooksToInventory_Click"
+                            Content="Lägg till böcker i lager" Margin="5" />
+                        <Button x:Name="MovebooksBtn" Content="Flytta böcker mellan butiker"
+                                Margin="5" Click="MovebooksBtn_Click"/>
+                    </StackPanel>
+
+                
+
+                
+
+                
+                    <DataGrid MaxHeight="150" ItemsSource="{Binding Inventory}"
+                          AutoGenerateColumns="False"
                           ColumnWidth="*"
                           CanUserAddRows="False"
                           IsReadOnly="True"
-                         Margin="10">
+                          Margin="10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Bok" IsReadOnly="True"
+                                            Binding="{Binding Isbn13Navigation.Title}" />
+                            <DataGridTextColumn Header="Antal"
+                                            Binding="{Binding Quantity}" />
+                            <DataGridTextColumn Header="Styckpris"
+                                            Binding="{Binding Isbn13Navigation.Price}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+               
+                </StackPanel>
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Bok" IsReadOnly="True"
-                    Binding="{Binding Isbn13Navigation.Title}" />
-                        <DataGridTextColumn Header="Antal"
-                    Binding="{Binding Quantity}" />
-                        <DataGridTextColumn Header="Styckpris"
-                                Binding="{Binding Isbn13Navigation.Price}" />
-                    </DataGrid.Columns>
-                </DataGrid>
 
-            </StackPanel>
 
-            <StackPanel Grid.Row="1" Grid.Column="1" >
-                <Button x:Name="AddBooksToInventory" Click="AddBooksToInventory_Click" Content="Lägg till böcker i lager" Margin="5" />
-                <Button x:Name="MovebooksBtn" Content="Flytta böcker mellan butiker" Margin="5" Click="MovebooksBtn_Click"/>
-            </StackPanel>
+                <!--Lägg till böcker i inventory-->
+                <Grid Grid.Row="2" x:Name="AddInventoryGrid" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-            <!--Lägg till böcker i inventory-->
-            <Grid Grid.Row="2" x:Name="AddInventoryGrid" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Margin="20,0" Grid.Column="0" Text="Affär"/>
-                <TextBlock Margin="20,0" Grid.Column="1" Text="Bok"/>
-                <TextBlock Margin="20,0" Grid.Column="2" Text="Antal"/>
+                    <TextBlock Margin="20,0" Grid.Column="0" Text="Affär"/>
+                    <TextBlock Margin="20,0" Grid.Column="1" Text="Bok"/>
+                    <TextBlock Margin="20,0" Grid.Column="2" Text="Antal"/>
 
-                <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Stores}"
-                            DisplayMemberPath="Name"
-                            SelectedValue="{Binding SelectedStore}"
-                                Margin="10"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Books}"
+                    <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Stores}"
+                          DisplayMemberPath="Name"
+                          SelectedValue="{Binding SelectedStore}"
+                          Margin="10"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Books}"
                           DisplayMemberPath="Title"
                           SelectedValue="{Binding SelectedBook}"
                           Margin="10"/>
-                <TextBox x:Name="QuantityBox" Grid.Row="1" Grid.Column="2" Text="1" FontSize="18" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="QuantityBox" Grid.Row="1" Grid.Column="2"
+                         Text="1" FontSize="18" Width="40"
+                         VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center">
-                    <Button Tag="1"  Click="ConfirmAddMoveBookToInventory_Click"  Content="Bekräfta" Margin="5,0"/>
-                    <Button Click="CancelBtn_Click"  Content="Avbryt" />
-                </StackPanel>
-            </Grid>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3"
+                            VerticalAlignment="Center">
+                        <Button Tag="1" Click="ConfirmAddMoveBookToInventory_Click"
+                            Content="Bekräfta" Margin="5,0"/>
+                        <Button Click="CancelBtn_Click" Content="Avbryt" />
+                    </StackPanel>
+                </Grid>
 
-            <!--Flytta bok mellan butiker-->
-            <Grid Grid.Row="2" x:Name="MoveInventoryGrid" Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <!--Flytta bok mellan butiker-->
+                <Grid Grid.Row="2" x:Name="MoveInventoryGrid" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Margin="20,0" Grid.Column="0" Text="Från Affär"/>
-                <TextBlock Margin="20,0" Grid.Column="1" Text="Till Affär"/>
-                <TextBlock Margin="20,0" Grid.Column="2" Text="Bok"/>
-                <TextBlock Margin="20,0" Grid.Column="3" Text="Antal"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Stores}"
-                DisplayMemberPath="Name"
-                SelectedValue="{Binding SelectedStore}"
-                    Margin="10"/>
-                <ComboBox x:Name="ToStoreBox" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Stores}"
-                    DisplayMemberPath="Name"
-                    SelectedValue="{Binding StoreId}"
+                    <TextBlock Margin="20,0" Grid.Column="0" Text="Från Affär"/>
+                    <TextBlock Margin="20,0" Grid.Column="1" Text="Till Affär"/>
+                    <TextBlock Margin="20,0" Grid.Column="2" Text="Bok"/>
+                    <TextBlock Margin="20,0" Grid.Column="3" Text="Antal"/>
+
+                    <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Stores}"
+                          DisplayMemberPath="Name"
+                          SelectedValue="{Binding SelectedStore}"
+                          Margin="10"/>
+
+                    <ComboBox x:Name="ToStoreBox" Grid.Row="1" Grid.Column="1"
+                          ItemsSource="{Binding Stores}"
+                          DisplayMemberPath="Name"
+                          SelectedValue="{Binding StoreId}"
                           SelectedValuePath="StoreId"
-                    
-                        Margin="10"/>
-                <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Books}"
-              DisplayMemberPath="Title"
-              SelectedValue="{Binding SelectedBook}"
-              Margin="10"/>
-                <TextBox x:Name="QuantityToMoveBox" Grid.Row="1" Grid.Column="3" Text="1" FontSize="18" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                          Margin="10"/>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center">
-                    <Button Tag="2" x:Name="ConfirmMoveBookBtn" Click="ConfirmAddMoveBookToInventory_Click"  Content="Bekräfta" Margin="5,0"/>
-                    <Button Click="CancelBtn_Click" Content="Avbryt" />
-                </StackPanel>
-            </Grid>
+                    <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Books}"
+                          DisplayMemberPath="Title"
+                          SelectedValue="{Binding SelectedBook}"
+                          Margin="10"/>
+
+                    <TextBox x:Name="QuantityToMoveBox" Grid.Row="1" Grid.Column="3"
+                         Text="1" FontSize="18" Width="40"
+                         VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="4"
+                            VerticalAlignment="Center">
+                        <Button Tag="2" x:Name="ConfirmMoveBookBtn"
+                            Click="ConfirmAddMoveBookToInventory_Click"
+                            Content="Bekräfta" Margin="5,0"/>
+                        <Button Click="CancelBtn_Click" Content="Avbryt" />
+                    </StackPanel>
+                </Grid>
 
             <!--Alla böcker-->
-        </Grid>
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+           
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <TextBlock FontSize="20" Grid.Row="0" HorizontalAlignment="Center">
+                        Alla böcker
+                    </TextBlock>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock FontSize="20" Grid.Row="0"  HorizontalAlignment="Center">Alla böcker</TextBlock>
-
-
-            <DataGrid Grid.Row="1" Name="AllBooksGrid"
-                          AutoGenerateColumns="False"
-                          
-                          ColumnWidth="Auto"
-                          IsReadOnly="True"
-                          CanUserAddRows="False"
-                          ItemsSource="{Binding Books}"
-                          SelectedItem="{Binding SelectedBook}"
-                          MouseDoubleClick="EditSelectedBookButton_Click"
-                          MaxHeight="300">
+                    <StackPanel   Orientation="Horizontal">
+                        <Button x:Name="EditBookBtn" Content="Redigera vald bok"
+                        Click="EditSelectedBookButton_Click" Margin="5"/>
+                        <Button x:Name="NewBookButton" Content="Lägg till ny bok"
+                        Click="NewBookButton_Click" Margin="5"/>
+                        <Button x:Name="DeleteBookBtn" Content="Ta bort bok från databas"
+                        Click="DeleteBookBtn_Click" Margin="5"/>
+                    </StackPanel>
 
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Titel"
-                            Binding="{Binding Title}" />
-                    <DataGridTextColumn Header="Författare"
-                            Binding="{Binding Writer.FullName, Mode=OneWay}"  />
-                    <DataGridTextColumn Header="Pris" 
-                            Binding="{Binding Price}" />
-                    <DataGridTextColumn Header="Genre" Binding="{Binding Genre.Name}"/>
-                    <DataGridTextColumn Header="Publisher" Binding="{Binding Publisher.Name}"/>
-                    <DataGridTextColumn Header="Language" Binding="{Binding Language}"/>
-                    <DataGridTextColumn Header="ISBN13" Binding="{Binding Isbn13}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid  Name="AllBooksGrid"
+                        AutoGenerateColumns="False"
+                         VerticalAlignment="Top"
+                            ColumnWidth="Auto"
+                        IsReadOnly="True"
+                        CanUserAddRows="False"
+                        ItemsSource="{Binding Books}"
+                    SelectedItem="{Binding SelectedBook}"
+                    MouseDoubleClick="EditSelectedBookButton_Click"
+                    MaxHeight="200">
 
-
-            <!--Knappar för att hantera böcker för att redigera bok-->
-            <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,100">
-                <Button x:Name="EditBookBtn" Content="Redigera vald bok" Click="EditSelectedBookButton_Click" Margin="5"/>
-                <Button x:Name="NewBookButton" Content="Lägg till ny bok" Click="NewBookButton_Click" Margin="5"/>
-                <Button x:Name="DeleteBookBtn" Content="Ta bort bok från databas" Click="DeleteBookBtn_Click" Margin="5"/>
-            </StackPanel>
-
-        </Grid>
-
-
-
-
-
-
-        <!--Info om val butik-->
-
-        <StackPanel Grid.Column="0" Grid.Row="1">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="15" FontWeight="Bold" Text="Namn: "/>
-                <TextBlock FontStyle="Italic" FontSize="15" Text="{Binding SelectedStore.Name}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="20,0,0,0" FontSize="15" FontWeight="Bold" Text="Land: "/>
-                <TextBlock FontStyle="Italic"  FontSize="15" Text="{Binding SelectedStore.Country}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="20,0,0,0" FontSize="15" FontWeight="Bold" Text="Adress: "/>
-                <TextBlock FontStyle="Italic"  FontSize="15" Text="{Binding SelectedStore.FullAdress}"/>
-            </StackPanel>
-            <StackPanel  Orientation="Horizontal">
-                <TextBlock Margin="20,0,0,0" FontSize="15" FontWeight="Bold" Text="Total värde på inventory: "/>
-                <TextBlock FontSize="15" Text="{Binding TotalInventoryValue}"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
-                <Button Tag="1"  x:Name="EditStoreBtn" Click="EditStoreBtn_Click" Margin="20,20,0,0">Redigera butik</Button>
-                <Button Tag="2" x:Name="NewStoreBtn" Click="EditStoreBtn_Click" Margin="20,20,0,0">Ny Butik</Button>
-                <Button Tag="3" x:Name="DeleteStoreBtn" Click="EditStoreBtn_Click" Margin="20,20,0,0">Radera Butik</Button>
-
-            </StackPanel>
-
-
-            <StackPanel x:Name="EditStorePanel" Visibility="Hidden">
-                <TextBlock Margin="20,5,0,0" Text="Namn"/>
-                <TextBox x:Name="StoreNamebox" Margin="20,5,0,0" Text="{Binding SelectedStore.Name}"/>
-                <TextBlock Margin="20,5,0,0" Text="Land"/>
-                <TextBox x:Name="StoreCountryBox" Margin="20,5,0,0" Text="{Binding SelectedStore.Country}"/>
-                <TextBlock Margin="20,5,0,0" Text="Gata"/>
-                <TextBox x:Name="StoreStreetBox" Margin="20,5,0,0" Text="{Binding SelectedStore.Street}"/>
-                <TextBlock Margin="20,5,0,0" Text="Stad"/>
-                <TextBox x:Name="StoreCityBox" Margin="20,5,0,0" Text="{Binding SelectedStore.City}"/>
-                <TextBlock Margin="20,5,0,0" Text="Postkod"/>
-                <TextBox x:Name="StorePostalCodeBox" Margin="20,5,0,20" Text="{Binding SelectedStore.PostalCode}"/>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="ConfirmStoreUpdate" Click="ConfirmStoreUpdate_Click" Margin="20" Content="Uppdatera butik"/>
-                    <Button x:Name="CancelBtn" Click="CancelBtn_Click" Margin="20" Content="Avbryt"/>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Titel"
+                         Binding="{Binding Title}" />
+                            <DataGridTextColumn Header="Författare"
+                         Binding="{Binding Writer.FullName, Mode=OneWay}"  />
+                            <DataGridTextColumn Header="Pris" 
+                         Binding="{Binding Price}" />
+                            <DataGridTextColumn Header="Genre"
+                         Binding="{Binding Genre.Name}"/>
+                            <DataGridTextColumn Header="Publisher"
+                         Binding="{Binding Publisher.Name}"/>
+                            <DataGridTextColumn Header="Language"
+                         Binding="{Binding Language}"/>
+                            <DataGridTextColumn Header="ISBN13"
+                         Binding="{Binding Isbn13}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+ 
                 </StackPanel>
+               
 
-            </StackPanel>
-        </StackPanel>
+               
+                
+            </Grid>
 
-    </Grid>
+
+            
+        </Grid>
+    </ScrollViewer>
+
 </Window>

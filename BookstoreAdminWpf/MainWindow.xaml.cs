@@ -288,12 +288,17 @@ namespace BookstoreAdminWpf
 
         private void AddBooksToInventory_Click(object sender, RoutedEventArgs e)
         {
+            MoveInventoryGrid.Visibility = Visibility.Hidden;
+
             AddInventoryGrid.Visibility = Visibility.Visible;
         }
 
         private void MovebooksBtn_Click(object sender, RoutedEventArgs e)
         {
+            AddInventoryGrid.Visibility = Visibility.Hidden;
             MoveInventoryGrid.Visibility = Visibility.Visible;
         }
+
+       
     }
 }
