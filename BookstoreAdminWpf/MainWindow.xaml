@@ -160,8 +160,10 @@
                                             Binding="{Binding Isbn13Navigation.Price}" />
                         </DataGrid.Columns>
                     </DataGrid>
+                    
+                    
                
-                </StackPanel>
+               
 
 
 
@@ -252,8 +254,8 @@
                         <Button Click="CancelBtn_Click" Content="Avbryt" />
                     </StackPanel>
                 </Grid>
-
-            <!--Alla böcker-->
+                </StackPanel>
+                <!--Alla böcker-->
            
                 <StackPanel Grid.Row="1" Grid.Column="0">
                     <TextBlock FontSize="20" Grid.Row="0" HorizontalAlignment="Center">

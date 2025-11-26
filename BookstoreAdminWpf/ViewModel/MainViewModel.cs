@@ -242,7 +242,7 @@ namespace BookstoreAdminWpf.ViewModel
         {
             try
             {
-
+             await ShowInventoryAsync(storeId);
             var inventory = Inventory.SingleOrDefault(i => i.StoreId == storeId && i.Isbn13 == isbn13);
 
             if (inventory is null)
