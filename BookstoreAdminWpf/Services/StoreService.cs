@@ -61,27 +61,8 @@ namespace BookstoreAdminWpf.Services
             return inventory;
     }
 
-        //Update Inventory
-        public async Task UpdateInventoryAsync(Inventory inventory)
-        {
-            
-
-            _db.Inventories.Update(inventory);
-            await _db.SaveChangesAsync();
-
-
-        }
-
-        //Add Inventory 
-        public async Task AddInventoryItem(Inventory inventory)
-        {
-            if (inventory is not null )
-            {
-                await _db.Inventories.AddAsync(inventory);
-                await _db.SaveChangesAsync();
-            }
-        }
-
+       
+        //Update or Add inventory row
         public async Task SaveInventoryAsync(Inventory inventory)
         {
             // Hämta ev. befintlig rad från DB

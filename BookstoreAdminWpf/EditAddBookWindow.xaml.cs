@@ -34,12 +34,15 @@ namespace BookstoreAdminWpf
             Loaded += LoadWritersAndGenresAsync;
         }
 
+        //Load data
         private async void LoadWritersAndGenresAsync(object sender, RoutedEventArgs e)
         {
             await Vm.LoadAllWritersAsync();
             await Vm.LoadAllGenresAsync();
             await Vm.LoadAllPublishersAsync();
         }
+
+        //Save new data
         private async void Save_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
@@ -109,7 +112,7 @@ namespace BookstoreAdminWpf
         }
 
 
-        //Method for binding elements to properties (move to EditViewModel ? ) 
+       //Save edited book
         private void SaveBookOnClick()
         {
             if (Vm.Book is null)
@@ -164,6 +167,7 @@ namespace BookstoreAdminWpf
 
         }     
 
+        //Save new Genre Move to VM?
         private async Task SaveGenreOnClick()
         {
             Genre newGenre = new Genre();
@@ -178,6 +182,7 @@ namespace BookstoreAdminWpf
 
         }
 
+        //Save new Writer Move to VM?
         private async Task SaveWriterOnClick()
         {
             Writer newWriter = new Writer();
@@ -194,6 +199,7 @@ namespace BookstoreAdminWpf
 
         }
 
+        //Save new Publisher Move to VM?
         private async Task SavePublisherOnClick()
         {
             Publisher newPublisher = new Publisher();
@@ -207,9 +213,9 @@ namespace BookstoreAdminWpf
             NewPublisherGrid.Visibility = Visibility.Collapsed;
 
         }
-        //
+        
 
-
+        //Edit visibility buttons 
         private  void AddNewGenreBtn_Click(object sender, RoutedEventArgs e)
         {
             NewGenreGrid.Visibility = Visibility.Visible;
@@ -226,6 +232,7 @@ namespace BookstoreAdminWpf
             NewPublisherGrid.Visibility = Visibility.Visible;
         }
 
+        
         //Delete button for Writer, Genre and Publisher
         private async void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {

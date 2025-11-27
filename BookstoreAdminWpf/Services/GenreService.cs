@@ -24,7 +24,7 @@ namespace BookstoreAdminWpf.Services
             return result;
         }
 
-        //Post Genre 
+        //Add Genre 
 
         public async Task AddNewGenreAsync(Genre genre)
         {
