@@ -6,6 +6,7 @@ namespace BookstoreAdminWpf.Models;
 
 public partial class AppDbContext : DbContext
 {
+    //DB First approach
     public AppDbContext()
     {
     }
@@ -35,8 +36,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Writer> Writers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("");
+
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+        => optionsBuilder.UseSqlServer(""); // <--Insert connectionstring
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
