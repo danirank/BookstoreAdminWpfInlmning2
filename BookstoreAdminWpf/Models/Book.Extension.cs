@@ -9,6 +9,7 @@ namespace BookstoreAdminWpf.Models
 {
     public partial class Book
     {
+        //To handle date formats DateOnly <--> DateTime
         [NotMapped]
         public DateTime ReleaseDateAsDateTime
         {
