@@ -256,7 +256,7 @@
                 </Grid>
                 </StackPanel>
                 <!--Alla böcker-->
-           
+
                 <StackPanel Grid.Row="1" Grid.Column="0">
                     <TextBlock FontSize="20" Grid.Row="0" HorizontalAlignment="Center">
                         Alla böcker
@@ -300,12 +300,9 @@
                          Binding="{Binding Isbn13}"/>
                         </DataGrid.Columns>
                     </DataGrid>
- 
-                </StackPanel>
-               
 
-               
-                
+                </StackPanel>
+
             </Grid>
 
 

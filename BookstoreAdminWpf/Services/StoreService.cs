@@ -18,9 +18,9 @@ namespace BookstoreAdminWpf.Services
             _db = db;
         }
 
-        
-        
-       public async Task<List<Store>> GetAllStoresAsync()
+
+        //Read all
+        public async Task<List<Store>> GetAllStoresAsync()
         {
             var stores = await _db.Stores
                 .Include(x=> x.Orders)
@@ -30,13 +30,37 @@ namespace BookstoreAdminWpf.Services
             return stores;
         }
 
+        //Read by ID
         public async Task<Store> GetStoreByID(int? storeId)
         {
-            var store = await _db.Stores.FirstOrDefaultAsync(x=> x.StoreId == storeId);
+            var store = await _db.Stores.FirstOrDefaultAsync(x => x.StoreId == storeId);
             return store;
-            
+
         }
 
+        //Create Store
+        public async Task CreateNewStoreAsync(Store store)
+        {
+            if (store is not null)
+            {
+                await _db.Stores.AddAsync(store);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+        //Update Store
+        public async Task UpdateStoreAsync(Store store, int id)
+        {
+            if (store.StoreId != id)
+            {
+                return;
+            }
+
+            _db.Stores.Update(store);
+            await _db.SaveChangesAsync();
+        }
+
+        //Delete Store
         public async Task<bool> DeleteStoreAsync(int storeId)
         {
             var store = await _db.Stores.FindAsync(storeId);
@@ -49,6 +73,7 @@ namespace BookstoreAdminWpf.Services
             return true;
         }
 
+        //Get inventories for a specific store
         public async Task<List<Inventory>> GetInventoriesForStoreAsync(int storeId)
         {
             
@@ -88,25 +113,6 @@ namespace BookstoreAdminWpf.Services
 
 
 
-        public async Task CreateNewStoreAsync(Store store)
-        {
-            if (store is not null)
-            {
-                await _db.Stores.AddAsync(store);
-                await _db.SaveChangesAsync();
-            }
-        }
-
-        public async Task UpdateStoreAsync(Store store, int id)
-        {
-            if (store.StoreId != id)
-            {
-                return;
-            }
-
-            _db.Stores.Update(store);
-            await _db.SaveChangesAsync();
-        }
         
 
 

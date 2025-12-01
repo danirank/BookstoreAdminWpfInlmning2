@@ -16,6 +16,7 @@ namespace BookstoreAdminWpf.Services
         {
             _db = db;
         }
+       
         //Get all writers 
         public async Task<List<Writer>> GetAllWritersAsync()
         {
@@ -24,7 +25,8 @@ namespace BookstoreAdminWpf.Services
             return result; 
         }
 
-        //Post writer 
+
+        //Create writer 
 
         public async Task AddNewWriterAsync(Writer writer)
         {

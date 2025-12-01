@@ -18,7 +18,7 @@ namespace BookstoreAdminWpf.Services
             _db = db;   
         }
 
-        //Get all books with Writer and Genre (FK's)
+        //Read all books with Writer and Genre (FK's)
         public async Task<List<Book>> GetAllBooksAsync()
         {
             var books = await _db.Books
@@ -30,7 +30,7 @@ namespace BookstoreAdminWpf.Services
 
         }
 
-        //Get book by ID (isbn13)
+        //Read book by ID (isbn13)
         public async Task<Book> GetBookByIDAsync(string isbn13)
         {
 
@@ -53,7 +53,7 @@ namespace BookstoreAdminWpf.Services
 
         }
 
-        //Update book (tex om pris ändras) 
+        //Update book  
         public async Task UpdateBookAsync(Book book, string isbn)
         {
             if (book.Isbn13 != isbn)
