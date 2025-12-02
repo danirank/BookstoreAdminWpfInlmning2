@@ -318,11 +318,7 @@ namespace BookstoreAdminWpf.ViewModel
 
         public async Task DeleteStoreAsync(Store store)
         {
-            if (SelectedStore is null)
-            {
-                MessageBox.Show("Välj butiken du vill radera");
-                return;
-            }
+           
 
             var mbResult = MessageBox.Show(
                 $"Är du säker på att du vill ta bort butiken med namn {store.Name}",
@@ -332,7 +328,7 @@ namespace BookstoreAdminWpf.ViewModel
 
             if (mbResult == MessageBoxResult.Yes)
             {
-                bool deleted = await _storeService.DeleteStoreAsync(SelectedStore.StoreId);
+                bool deleted = await _storeService.DeleteStoreAsync(store.StoreId);
 
                 if (deleted)
                 {
@@ -342,7 +338,7 @@ namespace BookstoreAdminWpf.ViewModel
                 }
                 else
                 {
-                    MessageBox.Show("Misslyckades att radera nutik");
+                    MessageBox.Show("Misslyckades att radera butik");
                 }
 
             }

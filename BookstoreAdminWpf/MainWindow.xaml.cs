@@ -84,6 +84,7 @@ namespace BookstoreAdminWpf
             };
 
             var result = dialog.ShowDialog();
+
             if (result == true)
             {
 
@@ -124,6 +125,12 @@ namespace BookstoreAdminWpf
                 }
                 if (btn.Tag.ToString() == "3")
                 {
+                    if (_vm.SelectedStore is null)
+                    {
+                        MessageBox.Show("Välj en butik att ta bort");
+                        EditStorePanel.Visibility = Visibility.Hidden;
+                        return;
+                    }
                     await _vm.DeleteStoreAsync(_vm.SelectedStore);
                     EditStorePanel.Visibility = Visibility.Hidden;
                 }
